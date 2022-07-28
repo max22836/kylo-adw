@@ -1,0 +1,3 @@
+<h1>Тэги</h1>
+{% for tag in tags %}
+<h5><a href="{% url 'tag_list' tag_id=tag.id %}">{{ tag.name }}</a></h5>
