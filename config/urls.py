@@ -20,5 +20,5 @@ from config.views import home
 urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
-    path('blog/', include('apps.blog.urls'))
+    path('blog/', include('apps.blog.urls')),
 ]
