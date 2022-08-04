@@ -8,7 +8,9 @@
             {% if category.image %}
                 <img class="img-thumbnail" src="{{ category.image.url }}" alt="">
             {% else %}
-                <img class="img-thumbnail" src="{% static 'no-image.png' %}" alt="">
+                <a href="{% url 'home' %}">
+                    <img class="img-thumbnail" src="{% static 'no-image.png' %}" alt="">
+                </a>
             {% endif %}
             <h4><a href="{% url 'article_list' category_id=category.id %}"> {{ category.name }}</a></h4>
         </div>
