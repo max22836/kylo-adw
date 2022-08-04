@@ -6,13 +6,16 @@
     <div class="row">
         {% for article in articles %}
             <div class="col-4 blog-item">
-                {% if article.image %}
-                    <img class="img-thumbnail" src="{{ article.image_thumbnail.url }}" alt="">
-                {% else %}
-                    <a href="{% url 'home' %}">
-                        <img class="img-thumbnail" src="{% static 'no-image.png' %}" alt="">
-                    </a>
-                {% endif %}
+                <a href="{% url 'article_view' article_id=article.id category_id=article.category.id %}">{{ article.title }}
+
+                    {% if article.image %}
+                        <img class="img-thumbnail" src="{{ article.image_thumbnail.url }}" alt="">
+                    {% else %}
+                        <a href="{% url 'home' %}">
+                            <img class="img-thumbnail" src="{% static 'no-image.png' %}" alt="">
+                        </a>
+                    {% endif %}
+                </a>
                 <h4>
                     <a href="{% url 'article_view' article_id=article.id category_id=article.category.id %}">{{ article.title }}</a>
                 </h4>
