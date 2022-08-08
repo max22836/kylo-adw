@@ -1,20 +1,32 @@
 from django.contrib import admin
 from apps.blog.models import Article, BlogCategory, Tag
-
-
-@admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'image_tag_thumbnail','created_at']
-    list_display_links = ['id', 'title', 'image_tag_thumbnail']
+from django.urls import reverse
+from django.utils.html import format_html
 
 
 @admin.register(BlogCategory)
 class BlogCategoryAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'image_tag_thumbnail']
     list_display_links = ['id', 'name', 'image_tag_thumbnail']
-    fields = ['name', 'image_tag_thumbnail', 'image']
+    fields = ['name', 'image_tag', 'image']
     readonly_fields = ['image_tag']
 
-    @admin.register(Tag)
-    class TagAdmin(admin.ModelAdmin):
-        list_display = ['name']
+
+@admin.register(Article)
+class ArticleAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'image_tag_thumbnail', 'category', 'created_at']
+    list_display_links = ['id', 'title', 'image_tag_thumbnail']
+    fields = ['category', 'image_tag', 'image', 'tags', 'title', 'text_preview', 'text']
+    readonly_fields = ['image_tag']
+    list_filter = ['category', 'tags']
+
+    def category_link(self, obj):
+        url = reverse('admin:blog_blogcategory_change', args=[obj.category.id])
+        return format_html(f"html<a href='{url}'>{obj.category.name}</a>")
+
+    category_link.short_description = 'Категория'
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ['name', 'tag_search', '']
