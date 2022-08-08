@@ -26,7 +26,14 @@ class ArticleAdmin(admin.ModelAdmin):
 
     category_link.short_description = 'Категория'
 
+    def tag_links(self, obj):
+        tags_links = []
+        for tag in obj.tags.all():
+            url = reverse('admin:blog_tag_change', args=[tag.id])
+            tags_links.append(f"html<a href='{url}'>{tag.name}</a>")
+        return format_html(', '.join(tags_links))
+
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ['name', 'tag_search', '']
+    list_display = ['name', ]

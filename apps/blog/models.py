@@ -19,7 +19,7 @@ class BlogCategory(models.Model):
 
     def image_tag_thumbnail(self):
         if self.image:
-            return mark_safe(f"<img src='/{MEDIA_ROOT}{self.image}' width ='70'>")
+            return mark_safe(f"<img src='/{MEDIA_ROOT}{self.image}' width='70'>")
 
     image_tag_thumbnail.short_description = 'Текущее изображение'
     image_tag_thumbnail.allow_tags = True
@@ -35,8 +35,8 @@ class BlogCategory(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Категория Блога'
-        verbose_name_plural = 'Категории Блога'
+        verbose_name = 'Категория блога'
+        verbose_name_plural = 'Категории блога'
 
 
 class Tag(models.Model):
@@ -56,9 +56,8 @@ class Article(models.Model):
         verbose_name='Категория',
         on_delete=models.SET_NULL,
         null=True
-
     )
-    tags = models.ManyToManyField(to=Tag, verbose_name='Тэги')
+    tags = models.ManyToManyField(to=Tag, verbose_name="Тэги", blank=True)
     image = ProcessedImageField(
         verbose_name='Изображение',
         upload_to='blog/article/',
@@ -67,11 +66,11 @@ class Article(models.Model):
         options={'quality': 100},
         null=True
     )
-    image_thunmbnail = ImageSpecField(
+    image_thumbnail = ImageSpecField(
         source='image',
         processors=[ResizeToFill(600, 400)],
         format='JPEG',
-        options={'quality': 1000}
+        options={'quality': 100}
     )
     title = models.CharField(verbose_name='Заголовок', max_length=255)
     text_preview = models.TextField(verbose_name='Текст-превью')
@@ -81,14 +80,18 @@ class Article(models.Model):
 
     def image_tag_thumbnail(self):
         if self.image:
-            return mark_safe(f"<img src='/{MEDIA_ROOT}{self.image_thunmbnail}' width ='70'>")
+            if not self.image_thumbnail:
+                Article.objects.get(id=self.id)
+            return mark_safe(f"<img src='/{MEDIA_ROOT}{self.image_thumbnail}' width='70'>")
 
     image_tag_thumbnail.short_description = 'Текущее изображение'
     image_tag_thumbnail.allow_tags = True
 
     def image_tag(self):
         if self.image:
-            return mark_safe(f"<img src='/{MEDIA_ROOT}{self.image}'>")
+            if not self.image_thumbnail:
+                Article.objects.get(id=self.id)
+            return mark_safe(f"<img src='/{MEDIA_ROOT}{self.image_thumbnail}'>")
 
     image_tag.short_description = 'Текущее изображение'
     image_tag.allow_tags = True
