@@ -77,6 +77,7 @@ class Article(models.Model):
     text = models.TextField(verbose_name='Текст')
     created_at = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='Дата редактирования', auto_now=True)
+    user = models.ForeignKey(verbose_name='Автор')
 
     def image_tag_thumbnail(self):
         if self.image:
