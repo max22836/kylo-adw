@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from imagekit.models import ProcessedImageField
 from mptt.models import MPTTModel, TreeForeignKey
@@ -54,16 +55,21 @@ class Category(MPTTModel):
         return ' -> '.join(full_path[::-1])
 
     def get_absolute_url(self):
+        return reverse('category', args=[self.slug])
 
-        name = models.CharField(varchar(255)
 
-        description - text
+class Product(models.Model):
+    name = models.CharField(verbose_name='Название', max_length=255)
+    description = models.TextField(verbose_name='Описание', blank=True, null=True)
+    quantity = models.PositiveIntegerField(verbose_name='Количество', default=1)
+    price = models.DecimalField(verbose_name='Цена', max_digits=12, decimal_places=2, default=0)
+    created_at = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name='Дата обновления', auto_now=True)
 
-        quantity - int
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Товары'
+        verbose_name_plural = 'Товары'
 
-        price = models.DecimalField(verbose_name='Цена', max_digits=12, decimal_places=2, default=0)
-
-        created_at - Datetime
-
-        updated_at - Datetime
-
+    def __str__(self):
+        return self.name
