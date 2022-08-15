@@ -7,6 +7,12 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ['name']}
 
 
+class ProductCategoryInLine(admin.TabularInline):
+    model = Product.categories.through
+    extra = 1
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    pass
+    fields = ['name', 'description', 'quantity', 'price']
+    inlines = [ProductCategoryInLine]
