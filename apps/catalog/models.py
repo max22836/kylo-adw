@@ -106,3 +106,7 @@ class ProductCategory(models.Model):
     class Meta:
         verbose_name = 'Категория товара'
         verbose_name_plural = 'Категории товара'
+
+
+class ProductImage(models):
+
