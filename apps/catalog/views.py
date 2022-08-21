@@ -7,7 +7,7 @@ class CatalogIndexView(generic.ListView):
     template_name = 'catalog/index.html'
 
     def get_queryset(self):
-        return
+        return Category.objects.filter(parent=None)
 
 
 class ProductByCategoryView(generic.ListView):
@@ -26,7 +26,7 @@ class ProductByCategoryView(generic.ListView):
         context['categories'] = self.categories
         return context
 
+
 class ProductDetailView(generic.DetailView):
     model = Product
     template_name = 'catalog/product.html'
-
