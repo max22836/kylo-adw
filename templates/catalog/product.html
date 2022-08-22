@@ -38,8 +38,8 @@
             </div>
 
             <div class="col-xs-12 col-md-6">
-                <p>Наличие: <b class="text-success">В наличии</b></p>
-                <b class="text-danger product-price">100 грн.</b>
+                <p>Наличие: <b class="product-quantity">{{ product.quantity }}</b></p>
+                <b class="text-danger product-price">{{ product.price }}</b>
                 <form action="">
                     <div class="input-group mb-3">
                         <input type="number" min="1" step="1" max="100" value="1" class="form-control">
@@ -47,10 +47,8 @@
                     </div>
                 </form>
                 <br>
-                <h4 class="text-center">Описание</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos, ipsa repudiandae! Consequatur ipsa nam
-                    obcaecati porro qui quod repellendus. Eius, expedita illo illum iusto maiores obcaecati odit
-                    perferendis placeat quos?</p>
+                <h4 class="text-center">Описание:</h4>
+                <p class="product-description">{{ product.description }}</p>
             </div>
 
         </div>
