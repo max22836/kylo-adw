@@ -5,14 +5,17 @@ from apps.catalog.models import Category, Product, Image
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ['name']}
+    readonly_fields = ['image_tag']
+    fields = ['name', 'slug', 'parent', 'description', 'image_tag', 'image',
+              'meta_title', 'meta_description', 'meta_keywords']
 
 
-class ProductCategoryInLine(admin.TabularInline):
+class ProductCategoryInline(admin.TabularInline):
     model = Product.categories.through
     extra = 1
 
 
-class ImageInLine(admin.TabularInline):
+class ImageInline(admin.TabularInline):
     model = Image
     fields = ['product', 'image_tag', 'image', 'is_main']
     readonly_fields = ['image_tag']
@@ -21,5 +24,5 @@ class ImageInLine(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    fields = ['name', 'description', 'quantity', 'price']
-    inlines = [ProductCategoryInLine, ImageInLine]
+    fields = ['name', 'description', 'quantity', 'price', 'meta_title', 'meta_description', 'meta_keywords']
+    inlines = [ProductCategoryInline, ImageInline]
