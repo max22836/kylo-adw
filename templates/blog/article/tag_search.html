@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% block meta_tags %}
     {% include '_meta_tags.html' with meta_title='Статьи которые содержат тэги' %}
-    {% include '_meta_tags.html' with meta_description = 'Описание Статей с тэгами' %}
-    {% include '_meta_tags.html' with meta_keywords = 'Ключевые Слова Статей с тэгами' %}
 {% endblock %}
 {% block content %}
     <h1>Статьи которые содержат тэг #{{ tag.name }}</h1>
