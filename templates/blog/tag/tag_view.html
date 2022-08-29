@@ -1,4 +1,7 @@
 <h1>Тэги</h1>
+{% block bread_crumbs %}
+    {% include '_bread_crums.html' %}
+{% endblock %}
 {% for tag in tags %}
     <h4><a href="{% url 'tag_view' tag_id=tag.id %}">{{ tag.name }}</a></h4>
 
