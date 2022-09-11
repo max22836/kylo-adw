@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from apps.order.forms import AddToCartForm
+from apps.order.forms import AddToCartForm, CreateOrderForm
 from apps.order.models import Cart
 
 
@@ -15,9 +15,7 @@ def get_cart_data(user):
 @login_required
 def add_to_cart(request):
     data = request.GET.copy()
-    print(data)
     data.update(user=request.user)
-    print(data)
     request.GET = data
     form = AddToCartForm(request.GET)
     if form.is_valid():
@@ -37,3 +35,34 @@ def add_to_cart(request):
 @login_required
 def cart_view(request):
     return render(request, 'order/cart_view.html', {'cart': get_cart_data(request.user)})
+
+
+@login_required
+def create_order(request):
+    error = None
+    user = request.user
+    cart = get_cart_data(user)
+
+    if not cart['cart']:
+        return redirect('home')
+
+    if request.method == 'POST':
+
+        data = request.POST.copy()
+        data.update(user=request.user, total=cart['total'])
+        request.POST8 = data
+        form = CreateOrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            Cart.objects.filter(user=user).delete()
+            return render(request, 'order/created.html')
+        error = form.errors
+    else:
+        form = CreateOrderForm(data={
+            'first_name': user.first_name if user.first_name else '',
+            'last_name': user.last_name if user.last_name else '',
+            'email': user.email if user.email else '',
+            'phone': user.phone if user.phone else '',
+
+        })
+    return render(request, 'order/create.html', {'cart': cart, 'form': form, 'error': error})
