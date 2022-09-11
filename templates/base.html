@@ -45,6 +45,10 @@
 
 
 
+
+
+
+
                         {% if request.GET.next %}{{ request.GET.next }}{% else %}{{ request.path }}{% endif %}">Войти</a>
                     или <a href="{% url 'register' %}?next={{ request.path }}">Зарегестрироватся</a></p>
             {% endif %}
@@ -106,5 +110,22 @@
 
     {% endblock %}
 </div>
+
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <br>
+                <br>
+                <hr>
+            </div>
+            <div class="col">
+                <p class="text-center text-info">Все права защищены, правда хрен знает кем)</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
 </body>
 </html>
