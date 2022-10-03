@@ -40,3 +40,10 @@ class ArticleViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(category=self.request.query_params.get('category'))
 
         return queryset
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        queryset = Tag.objects.all()
+        if self.request.query_params.get('tag'):
+            queryset = queryset.filter(tag=self.request.query_params.get('tag'))
