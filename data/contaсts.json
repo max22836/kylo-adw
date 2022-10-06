@@ -1,0 +1,10 @@
+[
+  {
+    "model": "main.contacts",
+    "fields": {
+      "name": "Контакты",
+      "slug": "contacts",
+      "is_active": true
+    }
+  }
+]
