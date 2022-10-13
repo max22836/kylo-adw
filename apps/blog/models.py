@@ -117,27 +117,31 @@ class Article(MetaTagMixin):
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(
-        to=User,
-        verbose_name='Автор',
-        on_delete=models.SET_NULL,
-        null=True
-    )
     article = models.ForeignKey(
         to=Article,
         verbose_name='Статья',
         on_delete=models.SET_NULL,
         null=True
     )
-    name = models.CharField(verbose_name='Название', max_length=50)
-    email = models.EmailField()
+    user = models.ForeignKey(
+        to=User,
+        verbose_name='Автор',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    name = models.CharField(verbose_name='Имя автора', max_length=50)
+    email = models.EmailField(verbose_name='E-mail')
     comment_text = models.TextField(verbose_name='Содержание коментария', max_length=255)
     created_at = models.DateTimeField(verbose_name='Дата Создания', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='Дата Обновления', auto_now=True)
-    active = models.BooleanField(default=True)
+    is_checked = models.BooleanField(verbose_name='Проверен', default=False)
 
     class Meta:
         ordering = ['created_at']
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментрии'
 
     def __str__(self):
         return 'Комментировано пользователем {} '.format(self.name)

@@ -17,6 +17,7 @@
     <p>
         <b>Дата</b>: {{ article.created_at }} <br>
         <b>Категория</b>: {{ category.name }} <br>
+        <b>Комментариев</b>: {{ comments.count }} <br>
     </p>
     {% if article.user %}
         <div class="text-end">
@@ -30,4 +31,13 @@
             </div>
         </div>
     {% endif %}
+
+    {% include 'blog/article/_comments.html' %}
+
+    <div class="row">
+        <div class="col3"></div>
+        <div class="clo6">
+            {% include 'blog/article/_comment_form.html' %}
+        </div>
+    </div>
 {% endblock %}
