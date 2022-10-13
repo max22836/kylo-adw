@@ -1,9 +1,8 @@
 from django.contrib import admin
-from apps.blog.models import Article, BlogCategory, Tag
+from apps.blog.models import Article, BlogCategory, Tag, Comment
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.http import urlencode
-
 
 admin.site.register(Tag)
 
@@ -18,9 +17,9 @@ class BlogCategoryAdmin(admin.ModelAdmin):
     def article_list_link(self, obj):
         count = Article.objects.filter(category=obj).count()
         url = (
-            reverse('admin:blog_article_changelist')
-            + '?'
-            + urlencode({'category__id': obj.id, 'category__id__exact': obj.id})
+                reverse('admin:blog_article_changelist')
+                + '?'
+                + urlencode({'category__id': obj.id, 'category__id__exact': obj.id})
         )
         return format_html(f"<a href='{url}'>Статьи(ей): {count}</a>")
 
@@ -52,4 +51,14 @@ class ArticleAdmin(admin.ModelAdmin):
 
         # return format_html(tags_links.rstrip(', '))
         return format_html(', '.join(tags_links))
+
     tags_links.short_description = 'Тэги'
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'created_at', 'updated_at', 'user', 'article')
+    list_filter = ('active', 'created_at', 'updated_at', 'user', 'article')
+    search_fields = ('name', 'email', 'comment_text', 'user', 'article')
+
+
