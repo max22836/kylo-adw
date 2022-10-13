@@ -1,7 +1,12 @@
-from django.shortcuts import render
+from django.contrib.auth import authenticate
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from rest_framework.authtoken.models import Token
+from rest_framework.exceptions import AuthenticationFailed
 
-from apps.blog.models import BlogCategory, Article, Tag
+from apps.api.user.serializers import TokenSerializer
+
+from apps.blog.models import BlogCategory, Article, Tag, Comment, User
 from config.settings import PAGE_NAMES
 
 
@@ -51,3 +56,15 @@ def tag_search_article_list(request, tag_id):
         'blog/article/tag_search.html',
         {'articles': articles, 'tag': tag, 'breadcrumbs': breadcrumbs}
     )
+
+
+def comment_view(request, comment_id, article_id):
+    comment = Comment.objects.get(id=comment_id)
+    article = Article.objects.get(id=article_id)
+    user = request.user
+    if request.user.is_authenticated:
+        user.comment_set(is_checked=True)
+        return render(request, 'blog/comment/comment_added.html')
+    else:
+        user.comment_set(is_checked=False)
+        return 'Залогинся сначала'
