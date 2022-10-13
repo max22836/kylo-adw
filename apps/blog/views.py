@@ -5,6 +5,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import AuthenticationFailed
 
 from apps.api.user.serializers import TokenSerializer
+from apps.blog.forms import CommentForm
 
 from apps.blog.models import BlogCategory, Article, Tag, Comment, User
 from config.settings import PAGE_NAMES
@@ -31,15 +32,33 @@ def article_list(request, category_id):
 def article_view(request, category_id, article_id):
     article = Article.objects.get(id=article_id)
     category = BlogCategory.objects.get(id=category_id)
+    comments = Comment.objects.filter(article=article, is_checked=True)
     breadcrumbs = {
         reverse('blog_category_list'): PAGE_NAMES['blog'],
         reverse('article_list', args=[category.id]): category.name,
         'current': article.title
     }
+    error = None
+
+    if request.method == 'POST':
+        data = request.POST.copy()
+        data.update(article=article)
+        user = request.user
+
+        if not user.is_anonymous:
+            data.update(user=user, name=user.username, email=user.email, is_checked=True)
+        request.POST = data
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'blog/article/created.html', {'article': article})
+        else:
+            error = form.errors
+
     return render(
         request,
         'blog/article/view.html',
-        {'article': article, 'category': category, 'breadcrumbs': breadcrumbs}
+        {'article': article, 'category': category, 'breadcrumbs': breadcrumbs, 'error': error, 'comments': comments}
     )
 
 
@@ -56,15 +75,3 @@ def tag_search_article_list(request, tag_id):
         'blog/article/tag_search.html',
         {'articles': articles, 'tag': tag, 'breadcrumbs': breadcrumbs}
     )
-
-
-def comment_view(request, comment_id, article_id):
-    comment = Comment.objects.get(id=comment_id)
-    article = Article.objects.get(id=article_id)
-    user = request.user
-    if request.user.is_authenticated:
-        user.comment_set(is_checked=True)
-        return render(request, 'blog/comment/comment_added.html')
-    else:
-        user.comment_set(is_checked=False)
-        return 'Залогинся сначала'

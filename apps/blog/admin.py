@@ -57,8 +57,8 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'created_at', 'updated_at', 'user', 'article')
-    list_filter = ('active', 'created_at', 'updated_at', 'user', 'article')
-    search_fields = ('name', 'email', 'comment_text', 'user', 'article')
+    list_display = ['id', 'name', 'is_checked']
+    list_display_links = ['id', 'name']
 
-
+    def has_add_permission(self, request):
+        return False
